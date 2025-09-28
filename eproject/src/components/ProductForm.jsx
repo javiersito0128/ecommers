@@ -10,37 +10,41 @@ const ProductForm = ({ product, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (product) {
-      await updateDoc(doc(db, 'products', product.id), formData)
-    } else {
-      await addDoc(collection(db, 'products'), formData)
+    try {
+      if (product?.id) {
+        await updateDoc(doc(db, 'products', product.id), formData)
+      } else {
+        await addDoc(collection(db, 'products'), formData)
+      }
+      onClose()
+    } catch (err) {
+      console.error('Error saving product:', err)
     }
-    onClose()
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
         <Form.Label>Título</Form.Label>
-        <Form.Control name="title" value={formData.title} onChange={handleChange} />
+        <Form.Control name="title" value={formData.title} onChange={handleChange} required />
       </Form.Group>
       <Form.Group>
         <Form.Label>Precio</Form.Label>
-        <Form.Control name="price" type="number" value={formData.price} onChange={handleChange} />
+        <Form.Control name="price" type="number" value={formData.price} onChange={handleChange} required />
       </Form.Group>
       <Form.Group>
         <Form.Label>Descripción</Form.Label>
-        <Form.Control name="description" value={formData.description} onChange={handleChange} />
+        <Form.Control name="description" value={formData.description} onChange={handleChange} required />
       </Form.Group>
       <Form.Group>
         <Form.Label>Imagen URL</Form.Label>
-        <Form.Control name="image" value={formData.image} onChange={handleChange} />
+        <Form.Control name="image" value={formData.image} onChange={handleChange} required />
       </Form.Group>
       <Form.Group>
         <Form.Label>Categoría</Form.Label>
-        <Form.Control name="category" value={formData.category} onChange={handleChange} />
+        <Form.Control name="category" value={formData.category} onChange={handleChange} required />
       </Form.Group>
-      <Button type="submit">Guardar</Button>
+      <Button type="submit" className="mt-3">Guardar</Button>
     </Form>
   )
 }

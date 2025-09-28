@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { db } from '../firebase'
 import { collection, getDocs } from 'firebase/firestore'
 import ProductCard from '../components/ProductCard'
-import { Row, Col, Form, Spinner } from 'react-bootstrap'
+import { Row, Col, Form, Spinner, Alert } from 'react-bootstrap'
 
 const Productos = () => {
   const [products, setProducts] = useState([])
@@ -10,14 +10,20 @@ const Productos = () => {
   const [filterCategory, setFilterCategory] = useState('')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const querySnapshot = await getDocs(collection(db, 'products'))
-      const prods = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-      setProducts(prods)
-      setCategories([...new Set(prods.map(p => p.category))])
-      setLoading(false)
+      try {
+        const querySnapshot = await getDocs(collection(db, 'products'))
+        const prods = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+        setProducts(prods)
+        setCategories([...new Set(prods.map(p => p.category).filter(Boolean))])
+      } catch (err) {
+        setError('Error al cargar productos')
+      } finally {
+        setLoading(false)
+      }
     }
     fetchProducts()
   }, [])
@@ -28,6 +34,7 @@ const Productos = () => {
   )
 
   if (loading) return <Spinner animation="border" />
+  if (error) return <Alert variant="danger">{error}</Alert>
 
   return (
     <div>

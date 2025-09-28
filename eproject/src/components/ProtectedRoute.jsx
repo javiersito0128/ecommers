@@ -6,10 +6,11 @@ const ProtectedRoute = ({ children }) => {
   const { user, loading, subscribe } = useAuthStore()
 
   useEffect(() => {
-    subscribe()
+    const unsubscribe = subscribe()
+    return unsubscribe
   }, [subscribe])
 
-  if (loading) return <p>Cargando...</p>
+  if (loading) return <p>Cargando autenticación...</p>
   return user ? children : <Navigate to="/login" />
 }
 

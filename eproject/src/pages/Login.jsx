@@ -16,7 +16,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password)
       navigate('/')
     } catch (err) {
-      setError(err.message)
+      setError('Error en login: ' + err.message)
     }
   }
 
@@ -25,13 +25,13 @@ const Login = () => {
       <h1>Login</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleLogin}>
-        <Form.Group>
+        <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
-          <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} />
+          <Form.Control type="email" value={email} onChange={e => setEmail(e.target.value)} required />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className="mb-3">
           <Form.Label>Contraseña</Form.Label>
-          <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} />
+          <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} required />
         </Form.Group>
         <Button type="submit">Iniciar Sesión</Button>
       </Form>

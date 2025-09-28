@@ -14,6 +14,7 @@ const Navbar = () => {
           <Nav.Link as={Link} to="/productos">Tienda</Nav.Link>
           {user && <Nav.Link as={Link} to="/carrito">Carrito</Nav.Link>}
           {user && <Nav.Link as={Link} to="/admin">Admin</Nav.Link>}
+          <Nav.Link as={Link} to="/contacto">Contacto</Nav.Link>
         </Nav>
         <Nav>
           {user ? (
